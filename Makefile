@@ -175,6 +175,12 @@ lotus-bench:
 .PHONY: lotus-bench
 BINS+=lotus-bench
 
+lotus-recovery:
+    rm -f lotus-recovery
+	$(GOCC) build $(GOFLAGS) -o lotus-recovery ./cmd/lotus-recovery
+.PHONY: lotus-recovery
+BINS+=lotus-recovery
+
 lotus-stats:
 	rm -f lotus-stats
 	$(GOCC) build $(GOFLAGS) -o lotus-stats ./cmd/lotus-stats
