@@ -176,7 +176,7 @@ lotus-bench:
 BINS+=lotus-bench
 
 lotus-recovery:
-    rm -f lotus-recovery
+	rm -f lotus-recovery
 	$(GOCC) build $(GOFLAGS) -o lotus-recovery ./cmd/lotus-recovery
 .PHONY: lotus-recovery
 BINS+=lotus-recovery
