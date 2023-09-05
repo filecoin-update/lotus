@@ -81,7 +81,9 @@ var runCmd = &cli.Command{
 
 		url = fmt.Sprintf("%s/%s.car", url, sectorInfo.Pieces[0].Piece.PieceCID)
 		existingPieceSizes := make([]abi.UnpaddedPieceSize, 0)
-		pieceSize := abi.PaddedPieceSize(34359738368)
+		// 32G 34359738368
+		// 64G 68719476736
+		pieceSize := abi.PaddedPieceSize(68719476736)
 
 		rsp, err := g.Client().Get(ctx, url)
 		defer func(rsp *gclient.Response) {
