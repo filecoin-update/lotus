@@ -54,7 +54,7 @@ var runCmd = &cli.Command{
 
 		sid := abi.SectorNumber(sis[0])
 
-		sectorInfo, err := nodeApi.SectorsStatus(ctx, sid, true)
+		sectorInfo, err := nodeApi.SectorsStatus(ctx, sid, false)
 		if err != nil {
 			return err
 		}
@@ -79,11 +79,7 @@ var runCmd = &cli.Command{
 
 		url := cctx.String("url")
 
-		pi, err := nodeApi.PiecesGetPieceInfo(ctx, sectorInfo.Pieces[0].Piece.PieceCID)
-		if err != nil {
-			return err
-		}
-		url = fmt.Sprintf("%s/%s.car", url, pi.PieceCID.String())
+		url = fmt.Sprintf("%s/%s.car", url, sectorInfo.Pieces[0].Piece.PieceCID)
 		existingPieceSizes := make([]abi.UnpaddedPieceSize, 0)
 		pieceSize := abi.PaddedPieceSize(34359738368)
 
@@ -107,7 +103,6 @@ var runCmd = &cli.Command{
 		}
 		npi, err := sb.AddPiece(cctx.Context, sector, existingPieceSizes, pieceSize.Unpadded(), rsp.Body)
 
-		log.Info(pi.PieceCID.String())
 		log.Info(npi.PieceCID.String())
 
 		return nil
