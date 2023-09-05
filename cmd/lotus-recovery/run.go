@@ -55,6 +55,9 @@ var runCmd = &cli.Command{
 		sid := abi.SectorNumber(sis[0])
 
 		sectorInfo, err := nodeApi.SectorsStatus(ctx, sid, false)
+		if err != nil {
+			return err
+		}
 
 		sealingPath, err := homedir.Expand(cctx.String("path"))
 		if err != nil {
