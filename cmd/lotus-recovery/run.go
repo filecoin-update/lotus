@@ -83,7 +83,7 @@ var runCmd = &cli.Command{
 		existingPieceSizes := make([]abi.UnpaddedPieceSize, 0)
 		// 32G 34359738368
 		// 64G 68719476736
-		pieceSize := abi.UnpaddedPieceSize(68719476736)
+		pieceSize := abi.UnpaddedPieceSize(38353585046)
 
 		rsp, err := g.Client().Get(ctx, url)
 		defer func(rsp *gclient.Response) {
