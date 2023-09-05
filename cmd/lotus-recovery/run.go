@@ -62,14 +62,24 @@ var runCmd = &cli.Command{
 		}
 
 		tempDir, err := os.MkdirTemp(sealingPath, fmt.Sprintf("recover-%s", sid.String()))
+		if err != nil {
+			return err
+		}
 
 		sb, err := ffiwrapper.New(&basicfs.Provider{
 			Root: tempDir,
 		})
 
+		if err != nil {
+			return err
+		}
+
 		url := cctx.String("url")
 
 		pi, err := nodeApi.PiecesGetPieceInfo(ctx, sectorInfo.Pieces[0].Piece.PieceCID)
+		if err != nil {
+			return err
+		}
 		url = fmt.Sprintf("%s/%s.car", url, pi.PieceCID.String())
 		existingPieceSizes := make([]abi.UnpaddedPieceSize, 0)
 		pieceSize := abi.PaddedPieceSize(34359738368)
