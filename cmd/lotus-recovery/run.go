@@ -10,6 +10,7 @@ import (
 	"github.com/filecoin-project/lotus/storage/sealer/ffiwrapper"
 	"github.com/filecoin-project/lotus/storage/sealer/ffiwrapper/basicfs"
 	"github.com/filecoin-project/lotus/storage/sealer/storiface"
+	carv2 "github.com/ipld/go-car/v2"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -112,20 +113,29 @@ var runCmd = &cli.Command{
 			ProofType: sectorInfo.SealProof,
 		}
 
-		data, err := os.Open("/seal/baga6ea4seaqpbejbvomw3krehmpfre3he62xiz3exk45on46s5ixiunxqn2ocbq.car")
-		if err != nil {
-			return err
-		}
-		defer data.Close()
+		//data, err := os.Open("/seal/baga6ea4seaqpbejbvomw3krehmpfre3he62xiz3exk45on46s5ixiunxqn2ocbq.car")
+		//if err != nil {
+		//	return err
+		//}
+		//defer data.Close()
 
 		ssize, err := sector.ProofType.SectorSize()
 		if err != nil {
 			return err
 		}
 
-		maxPieceSize := abi.PaddedPieceSize(ssize - 82)
+		maxPieceSize := abi.PaddedPieceSize(ssize)
 
-		npi, err := sb.AddPiece(cctx.Context, sector, existingPieceSizes, maxPieceSize.Unpadded(), data)
+		a, err := carv2.OpenReader("/seal/baga6ea4seaqpbejbvomw3krehmpfre3he62xiz3exk45on46s5ixiunxqn2ocbq.car")
+		if err != nil {
+			return err
+		}
+		defer a.Close()
+		b, err := a.DataReader()
+		if err != nil {
+			return err
+		}
+		npi, err := sb.AddPiece(cctx.Context, sector, existingPieceSizes, maxPieceSize.Unpadded(), b)
 		if err != nil {
 			return err
 		}
