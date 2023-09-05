@@ -123,7 +123,7 @@ var runCmd = &cli.Command{
 			return err
 		}
 
-		maxPieceSize := abi.PaddedPieceSize(ssize + 82)
+		maxPieceSize := abi.PaddedPieceSize(ssize - 82)
 
 		npi, err := sb.AddPiece(cctx.Context, sector, existingPieceSizes, maxPieceSize.Unpadded(), data)
 		if err != nil {
