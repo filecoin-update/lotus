@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"github.com/filecoin-project/go-address"
@@ -124,7 +125,9 @@ var runCmd = &cli.Command{
 
 		maxPieceSize := abi.PaddedPieceSize(ssize)
 
-		npi, err := sb.AddPiece(cctx.Context, sector, existingPieceSizes, maxPieceSize.Unpadded(), data)
+		var bs []byte
+		_, err = data.Read(bs)
+		npi, err := sb.AddPiece(cctx.Context, sector, existingPieceSizes, maxPieceSize.Unpadded(), bytes.NewReader(bs))
 		if err != nil {
 			return err
 		}
