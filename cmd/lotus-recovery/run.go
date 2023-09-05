@@ -79,6 +79,7 @@ var runCmd = &cli.Command{
 
 		url := cctx.String("url")
 
+		log.Info(sectorInfo)
 		pi, err := nodeApi.PiecesGetPieceInfo(ctx, sectorInfo.Pieces[0].Piece.PieceCID)
 		if err != nil {
 			return err
