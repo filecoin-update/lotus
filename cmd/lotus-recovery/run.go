@@ -9,6 +9,7 @@ import (
 	cliutil "github.com/filecoin-project/lotus/cli/util"
 	"github.com/filecoin-project/lotus/storage/sealer/ffiwrapper"
 	"github.com/filecoin-project/lotus/storage/sealer/ffiwrapper/basicfs"
+	"github.com/filecoin-project/lotus/storage/sealer/fr32"
 	"github.com/filecoin-project/lotus/storage/sealer/storiface"
 	carv2 "github.com/ipld/go-car/v2"
 	"github.com/mitchellh/go-homedir"
@@ -135,7 +136,8 @@ var runCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		npi, err := sb.AddPiece(cctx.Context, sector, existingPieceSizes, maxPieceSize.Unpadded(), b)
+		data, err := fr32.NewUnpadReader(b, maxPieceSize)
+		npi, err := sb.AddPiece(cctx.Context, sector, existingPieceSizes, maxPieceSize.Unpadded(), data)
 		if err != nil {
 			return err
 		}
