@@ -93,8 +93,18 @@ var runCmd = &cli.Command{
 			}
 		}(rsp)
 
+		if err != nil {
+			return err
+		}
+
 		addr, err := nodeApi.ActorAddress(ctx)
+		if err != nil {
+			return err
+		}
 		actorID, err := address.IDFromAddress(addr)
+		if err != nil {
+			return err
+		}
 
 		sector := storiface.SectorRef{
 			ID: abi.SectorID{
@@ -105,6 +115,9 @@ var runCmd = &cli.Command{
 		}
 
 		npi, err := sb.AddPiece(cctx.Context, sector, existingPieceSizes, pieceSize, rsp.Body)
+		if err != nil {
+			return err
+		}
 
 		log.Info(npi.PieceCID.String())
 
