@@ -54,7 +54,7 @@ var runCmd = &cli.Command{
 
 		sid := abi.SectorNumber(sis[0])
 
-		sectorInfo, err := nodeApi.SectorsStatus(ctx, sid, false)
+		sectorInfo, err := nodeApi.SectorsStatus(ctx, sid, true)
 		if err != nil {
 			return err
 		}
@@ -79,7 +79,6 @@ var runCmd = &cli.Command{
 
 		url := cctx.String("url")
 
-		log.Info(sectorInfo)
 		pi, err := nodeApi.PiecesGetPieceInfo(ctx, sectorInfo.Pieces[0].Piece.PieceCID)
 		if err != nil {
 			return err
