@@ -81,7 +81,7 @@ var runCmd = &cli.Command{
 		existingPieceSizes := make([]abi.UnpaddedPieceSize, 0)
 		// 32G 34359738368
 		// 64G 68719476736
-		pieceSize := abi.PaddedPieceSize(68719476736)
+		//pieceSize := abi.PaddedPieceSize(68719476736)
 
 		//rsp, err := g.Client().Get(ctx, url)
 		//defer func(rsp *gclient.Response) {
@@ -116,7 +116,15 @@ var runCmd = &cli.Command{
 		if err != nil {
 			return err
 		}
-		npi, err := sb.AddPiece(cctx.Context, sector, existingPieceSizes, pieceSize.Unpadded(), data)
+
+		ssize, err := sector.ProofType.SectorSize()
+		if err != nil {
+			return err
+		}
+
+		maxPieceSize := abi.PaddedPieceSize(ssize)
+
+		npi, err := sb.AddPiece(cctx.Context, sector, existingPieceSizes, maxPieceSize.Unpadded(), data)
 		if err != nil {
 			return err
 		}
