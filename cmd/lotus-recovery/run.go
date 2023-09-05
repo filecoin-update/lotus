@@ -10,8 +10,6 @@ import (
 	"github.com/filecoin-project/lotus/storage/sealer/ffiwrapper"
 	"github.com/filecoin-project/lotus/storage/sealer/ffiwrapper/basicfs"
 	"github.com/filecoin-project/lotus/storage/sealer/storiface"
-	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/net/gclient"
 	"github.com/mitchellh/go-homedir"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
@@ -85,17 +83,17 @@ var runCmd = &cli.Command{
 		// 64G 68719476736
 		pieceSize := abi.PaddedPieceSize(68719476736)
 
-		rsp, err := g.Client().Get(ctx, url)
-		defer func(rsp *gclient.Response) {
-			err := rsp.Close()
-			if err != nil {
-				log.Error(err)
-			}
-		}(rsp)
-
-		if err != nil {
-			return err
-		}
+		//rsp, err := g.Client().Get(ctx, url)
+		//defer func(rsp *gclient.Response) {
+		//	err := rsp.Close()
+		//	if err != nil {
+		//		log.Error(err)
+		//	}
+		//}(rsp)
+		//
+		//if err != nil {
+		//	return err
+		//}
 
 		addr, err := nodeApi.ActorAddress(ctx)
 		if err != nil {
@@ -114,7 +112,11 @@ var runCmd = &cli.Command{
 			ProofType: sectorInfo.SealProof,
 		}
 
-		npi, err := sb.AddPiece(cctx.Context, sector, existingPieceSizes, pieceSize.Unpadded(), rsp.Body)
+		data, err := os.Open("/seal/baga6ea4seaqpbejbvomw3krehmpfre3he62xiz3exk45on46s5ixiunxqn2ocbq.car")
+		if err != nil {
+			return err
+		}
+		npi, err := sb.AddPiece(cctx.Context, sector, existingPieceSizes, pieceSize.Unpadded(), data)
 		if err != nil {
 			return err
 		}
