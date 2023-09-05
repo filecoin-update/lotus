@@ -83,7 +83,7 @@ var runCmd = &cli.Command{
 		existingPieceSizes := make([]abi.UnpaddedPieceSize, 0)
 		// 32G 34359738368
 		// 64G 68719476736
-		pieceSize := abi.PaddedPieceSize(68719476736)
+		pieceSize := abi.UnpaddedPieceSize(68719476736)
 
 		rsp, err := g.Client().Get(ctx, url)
 		defer func(rsp *gclient.Response) {
@@ -103,7 +103,8 @@ var runCmd = &cli.Command{
 			},
 			ProofType: sectorInfo.SealProof,
 		}
-		npi, err := sb.AddPiece(cctx.Context, sector, existingPieceSizes, pieceSize.Unpadded(), rsp.Body)
+
+		npi, err := sb.AddPiece(cctx.Context, sector, existingPieceSizes, pieceSize, rsp.Body)
 
 		log.Info(npi.PieceCID.String())
 
