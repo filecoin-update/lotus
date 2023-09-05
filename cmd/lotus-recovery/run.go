@@ -16,12 +16,11 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/xerrors"
 	"os"
-	"strconv"
 )
 
 var runCmd = &cli.Command{
-	Name:  "stop",
-	Usage: "Stop a running lotus worker",
+	Name:  "run",
+	Usage: "running lotus worker",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:  "path",
@@ -33,12 +32,16 @@ var runCmd = &cli.Command{
 			Usage: "url",
 			Value: "http://minio.com:9000/car/",
 		},
+		&cli.Uint64SliceFlag{
+			Name:  "sis",
+			Usage: "sis",
+		},
 	},
 	Action: func(cctx *cli.Context) error {
 
 		ctx := lcli.ReqContext(cctx)
 
-		sis := cctx.Args().Slice()
+		sis := cctx.Uint64Slice("sis")
 		if len(sis) < 1 {
 			return xerrors.New("扇区号不存在")
 		}
@@ -49,8 +52,7 @@ var runCmd = &cli.Command{
 		}
 		defer closer()
 
-		si, err := strconv.ParseUint(sis[0], 10, 64)
-		sid := abi.SectorNumber(si)
+		sid := abi.SectorNumber(sis[0])
 
 		sectorInfo, err := nodeApi.SectorsStatus(ctx, sid, false)
 
